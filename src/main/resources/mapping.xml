@@ -7,13 +7,13 @@
 			<field name="date" length="28" />
 		</record>
 		<record name="dockerStatHeader" class="map" order="2" occurs="1"/>
-		<record name="dockerStat" class="com.zucchetti.dc.dockerstats.DockerData" order="3" occurs="0+">
+		<record name="dockerStat" class="com.zucchetti.dc.dockerstats.DockerStatsRecord" order="3" occurs="0+">
 			<field name="container" length="27" />
 			<field name="cpuPerc" length="20" />
 			<field name="memUsage" length="24" />
 			<field name="memPerc" length="20" />
-			<field name="netio" length="22" />
-			<field name="blockio" length="20" />
+			<field name="netioUsage" length="22" />
+			<field name="blockioUsage" length="20" />
 		</record>
 	</stream>
 </beanio>

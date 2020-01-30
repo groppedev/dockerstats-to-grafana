@@ -55,7 +55,10 @@ public class Parser
 
 	public static void main(String[] args) throws IOException, SQLException 
 	{
+		execute();
+	}
 
+	private static void execute() throws IOException, SQLException, UnsupportedEncodingException {
 		// create a BeanIO StreamFactory
 		StreamFactory factory = StreamFactory.newInstance();
 		// load the mapping file from the working directory
@@ -96,21 +99,20 @@ public class Parser
 						}
 						else if ("dockerStat".equals(in.getRecordName()))
 						{
-							DockerData dc = (DockerData) record;
-							//System.out.println(dc);
+							DockerStats dc = DockerStats.calculateDockerStats((DockerStatsRecord) record);
+							System.out.println(dc);
 	
 							stmInsert.setString(1, dc.getContainer());
-							stmInsert.setDouble(2, Double.valueOf(dc.getCpuPerc()));
-							stmInsert.setDouble(3, Double.valueOf(dc.getMemPerc()));
-							stmInsert.setDouble(4, dc.getMemUsageValue());
-							stmInsert.setDouble(5, dc.getNetI());
-							stmInsert.setDouble(6, dc.getNetO());
-							stmInsert.setDouble(7, dc.getBlockI());
-							stmInsert.setDouble(8, dc.getBlockO());
+							stmInsert.setDouble(2, dc.getCpuPerc());
+							stmInsert.setDouble(3, dc.getMemPerc());
+							stmInsert.setDouble(4, dc.getMemUsageMb());
+							stmInsert.setDouble(5, dc.getNetIUsageMb());
+							stmInsert.setDouble(6, dc.getNetOUsageMb());
+							stmInsert.setDouble(7, dc.getBlockIUsageMb());
+							stmInsert.setDouble(8, dc.getBlockOUsageMb());
 							stmInsert.setTimestamp(9, sqlTimestamp);
 							
 							stmInsert.execute();
-							
 						}
 					}
 				}
@@ -163,7 +165,7 @@ public class Parser
 		connectionProps.put("user", "postgres");
 		connectionProps.put("password", "groppe");
 
-		Connection conn = DriverManager.getConnection("jdbc:postgresql://127.0.0.1:5433/grafana-dockerstat",connectionProps);
+		Connection conn = DriverManager.getConnection(DB_CONNECTION_URL,connectionProps);
 		return conn;
 	}
 
