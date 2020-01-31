@@ -1,0 +1,10 @@
+# Docker container
+docker volume create grafana-storage
+docker run -d -p 3001:3000 --name=groppe-local-grafana -v grafana-storage:/var/lib/grafana -e "GF_SERVER_ROOT_URL=http://host/path" --memory=128m --restart=always grafana/grafana
+
+# Old Docker version
+docker run -d -p 3001:3000 --name=groppe-local-grafana -v /tmp/docker-volume-grafana:/var/lib/grafana -e "GF_SERVER_ROOT_URL=http://host/path" --memory=128m --restart=always grafana/grafana
+
+# INIT PWD
+admin
+admin

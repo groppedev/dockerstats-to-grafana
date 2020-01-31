@@ -32,16 +32,19 @@ public class Parser
 	private static final String ORIG_FILE_PATH;
 	private static final String WORK_DIR_PATH;
 	private static final String DB_CONNECTION_URL;
+	private static final String DB_PWD;
 	
 	static
 	{
-		DB_CONNECTION_URL = SystemUtils.getEnvironmentVariable("DB_CONNECTION_URL", "jdbc:postgresql://127.0.0.1:5433/grafana-dockerstat");
-		ORIG_FILE_PATH = SystemUtils.getEnvironmentVariable("ORIG_FILE_PATH", "C:\\docs\\GUT\\dockerstats.txt");
-		WORK_DIR_PATH = SystemUtils.getEnvironmentVariable("WORK_DIR_PATH", "C:\\docs\\GUT\\dockerstats-work");
+		DB_CONNECTION_URL = System.getProperty("connectionurl", "jdbc:postgresql://127.0.0.1:5433/grafana-dockerstat");
+		ORIG_FILE_PATH = System.getProperty("origfilepath", "C:\\docs\\GUT\\dockerstats.txt");
+		WORK_DIR_PATH = System.getProperty("workdirpath", "C:\\docs\\GUT\\dockerstats-work");
+		DB_PWD = System.getProperty("dbpwd","postgres");
 		
 		System.out.println("DB_CONNECTION_URL -> " + DB_CONNECTION_URL);
 		System.out.println("ORIG_FILE_PATH -> " + ORIG_FILE_PATH);
 		System.out.println("WORK_DIR_PATH -> " + WORK_DIR_PATH);
+		System.out.println("DB_PWD -> " + DB_PWD);
 
 		try(InputStream mappingIn = Parser.class.getResourceAsStream("/mapping.xml");)
 		{
@@ -163,7 +166,7 @@ public class Parser
 	{
 		Properties connectionProps = new Properties();
 		connectionProps.put("user", "postgres");
-		connectionProps.put("password", "groppe");
+		connectionProps.put("password", DB_PWD);
 
 		Connection conn = DriverManager.getConnection(DB_CONNECTION_URL,connectionProps);
 		return conn;
